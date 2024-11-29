@@ -40,17 +40,17 @@ To extract it, run the following:
 cat data/minidb* | tar -C data -zxf -
 ```
 
-### With Docker
+### With Docker or Singularity
 
 <details>
-  <summary>Build image (optional)</summary>
+  <summary>Build Docker image (optional)</summary>
 
   ```sh
   docker build --no-cache -t interpro/matches-api:latest .
   ```
 </details>
 
-Start server:
+Start Docker container:
 
 ```sh
 docker run --rm \
@@ -58,4 +58,17 @@ docker run --rm \
   -e MATCHES_API_PATH=/data \
   -p 8000:8000 \
   interpro/matches-api:latest
+```
+
+Start Singularity container:
+
+```sh
+# Optional
+export SINGULARITY_DOCKER_USERNAME=<username>
+export SINGULARITY_DOCKER_PASSWORD=<personal-access-token>
+ 
+singularity run \
+    -B $PWD/data/minidb:/data \
+    --env "MATCHES_API_PATH=/data" \
+    docker://interpro/matches-api:latest
 ```
