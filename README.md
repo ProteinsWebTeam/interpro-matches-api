@@ -20,9 +20,9 @@ uvicorn matchesapi:app
 Query the matches for a few MD5 hashes:
 
 ```sh
-curl -X POST "localhost:8000/matches" -H 'Content-Type: application/json' -d'
+curl -X POST "localhost:8000/search" -H 'Content-Type: application/json' -d'
 {
-  "md5": [
+  "md5s": [
     "5FE1059FDE57D6E61C5343CAB0C502C8",
     "706475FD3508BACF05958AC1D6C7B9BD",
     "B5437FBB59FED6ED5A1A0F7B3409A5D0"

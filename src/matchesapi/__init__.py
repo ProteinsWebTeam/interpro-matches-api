@@ -25,11 +25,24 @@ app = FastAPI(
     title="InterPro Matches API",
     description="""
 The Matches API provides access to pre-calculated InterProScan results for \
-all sequences in UniParc.
+all sequences in [UniParc](https://www.uniprot.org/uniparc/).
 
-When InterProScan is queried with a known sequence, it retrieves the result \
-from the Matches API and reports the result immediately, thereby reducing \
-compute requirements and improving performance.""",
+Each sequence in UniParc is assigned a unique identifier \
+using the MD5 hashing method. This ensures that every sequence has a distinct \
+MD5, which serves as a key to quickly and efficiently retrieve \
+its corresponding InterPro matches.
+
+InterProScan uses the Matches API to streamline sequence analysis. \
+It calculates the MD5 for each input sequence and queries the Matches API \
+to fetch pre-calculated results for sequences already present in UniParc. \
+This approach eliminates redundant computations, \
+saving resources and improving overall performance.
+
+While the Matches API was primarily designed to enhance the efficiency \
+of InterProScan, it is also available to researchers and other services \
+seeking to retrieve InterPro matches. Users can submit the MD5 identifiers \
+of up to 1,000 sequences in a single request to quickly and efficiently \
+access pre-calculated match results.""",
     version=importlib.metadata.version("interpro-matches-api"),
     terms_of_service="https://www.ebi.ac.uk/about/terms-of-use",
     contact={
@@ -37,8 +50,8 @@ compute requirements and improving performance.""",
         "url": "https://www.ebi.ac.uk/about/contact/support/interpro",
     },
     # Docs URLs
-    docs_url="/docs",  # default
-    redoc_url=None,    # disable ReDoc
+    docs_url="/",    # default
+    redoc_url=None,  # disable ReDoc
 
 )
 app.add_middleware(
@@ -66,24 +79,24 @@ async def about():
 
 
 class MD5sQuery(BaseModel):
-    md5: conlist(constr(to_upper=True, min_length=32, max_length=32),
-                 min_length=1, max_length=1000)
+    md5s: conlist(constr(to_upper=True, min_length=32, max_length=32),
+                  min_length=1, max_length=1000)
 
     model_config = {
         "json_schema_extra": {
             "examples": [
                 {
-                    "md5": list(examples.matches.keys())
+                    "md5s": list(examples.matches.keys())
                 }
             ]
         }
     }
 
 
-@app.post("/matches", responses=examples.matches_responses)
+@app.post("/search", responses=examples.matches_responses)
 async def matches(query: MD5sQuery) -> dict[str, list[dict] | None]:
     results = {}
-    for md5 in query.md5:
+    for md5 in query.md5s:
         if md5 not in results:
             value = db.get(md5.encode("utf-8"))
             results[md5] = None if value is None else json.loads(value)
