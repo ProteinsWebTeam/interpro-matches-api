@@ -23,9 +23,9 @@ Query the matches for a few MD5 hashes:
 curl -X POST "localhost:8000/search" -H 'Content-Type: application/json' -d'
 {
   "md5s": [
-    "D807BE58521078C19090570C3170B91F",
-    "72A998E920EEC132301E6A5EB4BCD4CE",
-    "A4244BE42EC787C383263F876D38720C"
+    "020DA9322D8466E699BDD584593749FC",
+    "0204A4724F5991CB9B7E1013CBDA3367",
+    "00C5D66EC4232D18A9639ECF3FC4BDDB"
   ]
 }
 ' | python -m json.tool
@@ -37,7 +37,7 @@ A test database is provided in `data` as a compressed/split `tar` archive.
 To extract it, run the following:
 
 ```sh
-cat data/minidb* | tar -C data -zxf -
+tar -C data -zxf data/minidb.tar.gz
 ```
 
 ### With Docker or Singularity
