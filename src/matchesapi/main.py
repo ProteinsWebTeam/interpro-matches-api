@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_prefix="MATCHES_API_")
     path: DirectoryPath
     debug: bool = False
-    info: dict = {}
+    info: dict = {"api": importlib.metadata.version("interpro-matches-api")}
 
 
 settings = Settings()
@@ -116,6 +116,6 @@ async def batch_search(bsq: models.BatchSearchQuery) -> Any:
     return {"results": list(results.values())}
 
 
-@app.get("/version", include_in_schema=False)
-async def version():
+@app.get("/info", include_in_schema=False)
+async def info():
     return settings.info
