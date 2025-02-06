@@ -14,7 +14,7 @@ Specify the path to the database, then start the server:
 
 ```sh
 export MATCHES_API_PATH="/path/to/database"
-uvicorn matchesapi:app
+uvicorn matchesapi.main:app
 ```
 
 Query the matches for a few MD5 hashes:
