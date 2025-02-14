@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, constr, conlist
+from pydantic import BaseModel, constr, conlist
 
 from .examples import matches
 
@@ -6,7 +6,7 @@ from .examples import matches
 class LocationFragment(BaseModel):
     start: int
     end: int
-    dc_status: str = Field(..., alias="dc-status")
+    type: str
 
 
 class SiteLocation(BaseModel):
@@ -24,17 +24,20 @@ class Site(BaseModel):
 class Location(BaseModel):
     start: int
     end: int
-    hmmStart: int
-    hmmEnd: int
-    hmmLength: int
-    hmmBounds: str | None
-    envelopeStart: int
-    envelopeEnd: int
-    evalue: float
-    score: float
-    location_fragments: list[LocationFragment] = Field(..., alias="location-fragments")
-    sequence_feature: str | None = Field(None, alias="sequence-feature")
-    sites: list[Site]
+    fragments: list[LocationFragment]
+    hmmStart: int | None = None
+    hmmEnd: int | None = None
+    hmmLength: int | None = None
+    hmmBounds: str | None = None
+    envelopeStart: int | None = None
+    envelopeEnd: int | None = None
+    evalue: float | None = None
+    score: float | None = None
+    sequenceFeature: str | None = None
+    sites: list[Site] | None = None
+    pvalue: float | None = None
+    motifNumber: int | None = None
+    cigarAlignment: str | None = None
 
 
 class Entry(BaseModel):
@@ -60,10 +63,12 @@ class Signature(BaseModel):
 
 class Match(BaseModel):
     signature: Signature
-    model_ac: str = Field(..., alias="model-ac")
-    score: float
-    evalue: float
+    modelAccession: str
     locations: list[Location]
+    score: float | None = None
+    evalue: float | None = None
+    annotationNode: str | None = None
+    graphscan: str | None = None
 
 
 class SingleResponse(BaseModel):
@@ -79,7 +84,7 @@ class BatchResponse(BaseModel):
     results: list[BatchResult]
 
 
-class BatchSearchQuery(BaseModel):
+class BatchQuery(BaseModel):
     md5: conlist(
         constr(to_upper=True, min_length=32, max_length=32),
         min_length=1,

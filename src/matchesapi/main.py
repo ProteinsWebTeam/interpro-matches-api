@@ -27,7 +27,8 @@ db = Rdict(
 app = FastAPI(
     title="InterPro Matches API",
     description="""
-The Matches API provides access to pre-calculated InterProScan results for \
+The Matches API provides access to pre-calculated \
+[InterProScan](https://www.ebi.ac.uk/interpro/search/sequence/) results for \
 all sequences in [UniParc](https://www.uniprot.org/uniparc/).
 
 Each sequence in UniParc is assigned a unique identifier \
@@ -76,13 +77,14 @@ async def on_shutdown():
 
 
 @app.get(
-    "/search/{md5}",
-    name="Search",
-    description="Get InterPro matches for by sequence MD5 checksum",
+    "/matches/{md5}",
+    name="Single MD5",
+    description="Get InterPro matches by sequence MD5 checksum",
     response_model=models.SingleResponse,
     responses=examples.single_responses,
+    response_model_exclude_unset=True,
 )
-async def search(md5: constr(to_upper=True, min_length=32, max_length=32)) -> Any:
+async def single(md5: constr(to_upper=True, min_length=32, max_length=32)) -> Any:
     """
     Search for a single MD5 hash using a URL parameter.
     """
@@ -94,14 +96,15 @@ async def search(md5: constr(to_upper=True, min_length=32, max_length=32)) -> An
 
 
 @app.post(
-    "/search",
-    name="Batch search",
+    "/matches",
+    name="Multiple MD5",
     description="Get InterPro matches for multiple sequence MD5 checksums",
     response_model=models.BatchResponse,
+    response_model_exclude_unset=True,
 )
-async def batch_search(bsq: models.BatchSearchQuery) -> Any:
+async def batch(query: models.BatchQuery) -> Any:
     results = {}
-    for md5 in bsq.md5:
+    for md5 in query.md5:
         if md5 not in results:
             value = db.get(md5.encode("utf-8"))
             if value is None:
