@@ -57,6 +57,7 @@ class Signature(BaseModel):
     accession: str
     name: str | None
     description: str | None
+    type: str
     signatureLibraryRelease: SignatureLibraryRelease
     entry: Entry | None
 
