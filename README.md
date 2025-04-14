@@ -63,10 +63,6 @@ docker run --rm \
 Start Singularity container:
 
 ```sh
-# Optional
-export SINGULARITY_DOCKER_USERNAME=<username>
-export SINGULARITY_DOCKER_PASSWORD=<personal-access-token>
- 
 singularity run \
     -B $PWD/data/minidb:/data \
     --env "MATCHES_API_PATH=/data" \
