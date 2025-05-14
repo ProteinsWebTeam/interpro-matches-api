@@ -17,8 +17,8 @@ and retrieve their InterPro matches in bulk.
 Fetch the latest archive and its MD5 checksum:
 
 ```sh
-curl -OJ https://ftp.ebi.ac.uk/pub/databases/interpro/latest/matches-api-data.tar.gz
-curl -OJ https://ftp.ebi.ac.uk/pub/databases/interpro/latest/matches-api-data.tar.gz.md5
+curl -OJ https://ftp.ebi.ac.uk/pub/databases/interpro/releases/latest/matches-api-data.tar.gz
+curl -OJ https://ftp.ebi.ac.uk/pub/databases/interpro/releases/latest/matches-api-data.tar.gz.md5
 ```
 
 Verify integrity:
