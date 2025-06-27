@@ -92,7 +92,7 @@ Clone the repository and install in editable mode:
 pip install -e .
 ```
 
-Prepare the test database (included under `data/minidb.tar.gz`):
+Extract the test database (included under `data/minidb.tar.gz`):
 
 ```sh
 tar -C data -zxf data/minidb.tar.gz
@@ -101,6 +101,6 @@ tar -C data -zxf data/minidb.tar.gz
 Point the server to that database and launch it:
 
 ```sh
-export MATCHES_API_PATH="/path/to/database"
+export MATCHES_API_PATH="data/minidb"
 uvicorn matchesapi.main:app
 ```
