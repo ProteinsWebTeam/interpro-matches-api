@@ -5,7 +5,7 @@ from typing import Any
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import DirectoryPath, constr
+from pydantic import BaseModel, DirectoryPath, constr, conlist
 from rocksdict import Rdict, AccessType, Options
 
 from . import models, examples
@@ -14,11 +14,24 @@ from . import models, examples
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_prefix="MATCHES_API_")
     path: DirectoryPath
+    limit: int = 100
     debug: bool = False
     info: dict = {"api": importlib.metadata.version("interpro-matches-api")}
 
 
 settings = Settings()
+
+
+class BatchQuery(BaseModel):
+    md5: conlist(models.MD5String, min_length=1, max_length=settings.limit)
+
+    model_config = {
+        "json_schema_extra": {
+            "examples": [{"md5": [m["md5"] for m in examples.matches]}]
+        }
+    }
+
+
 db = Rdict(
     str(settings.path),
     access_type=AccessType.read_only(),
@@ -26,7 +39,7 @@ db = Rdict(
 )
 app = FastAPI(
     title="InterPro Matches API",
-    description="""
+    description=f"""
 The Matches API provides access to pre-calculated \
 [InterProScan](https://www.ebi.ac.uk/interpro/search/sequence/) results for \
 all sequences in [UniParc](https://www.uniprot.org/uniparc/).
@@ -45,8 +58,8 @@ saving resources and improving overall performance.
 While the Matches API was primarily designed to enhance the efficiency \
 of InterProScan, it is also available to researchers and other services \
 seeking to retrieve InterPro matches. Users can submit the MD5 identifiers \
-of up to 1,000 sequences in a single request to quickly and efficiently \
-access pre-calculated match results.""",
+of up to {settings.limit:,} sequences in a single request to quickly and \
+efficiently access pre-calculated match results.""",
     version=importlib.metadata.version("interpro-matches-api"),
     terms_of_service="https://www.ebi.ac.uk/about/terms-of-use",
     contact={
@@ -102,7 +115,7 @@ async def single(md5: constr(to_upper=True, min_length=32, max_length=32)) -> An
     response_model=models.BatchResponse,
     response_model_exclude_unset=True,
 )
-async def batch(query: models.BatchQuery) -> Any:
+async def batch(query: BatchQuery) -> Any:
     results = {}
     for md5 in query.md5:
         if md5 not in results:

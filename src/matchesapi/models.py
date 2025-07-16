@@ -1,6 +1,6 @@
-from pydantic import BaseModel, constr, conlist
+from typing import Annotated
 
-from .examples import matches
+from pydantic import BaseModel, StringConstraints
 
 
 class LocationFragment(BaseModel):
@@ -85,13 +85,6 @@ class BatchResponse(BaseModel):
     results: list[BatchResult]
 
 
-class BatchQuery(BaseModel):
-    md5: conlist(
-        constr(to_upper=True, min_length=32, max_length=32),
-        min_length=1,
-        max_length=1000,
-    )
-
-    model_config = {
-        "json_schema_extra": {"examples": [{"md5": [m["md5"] for m in matches]}]}
-    }
+MD5String = Annotated[
+    str, StringConstraints(to_upper=True, min_length=32, max_length=32)
+]
