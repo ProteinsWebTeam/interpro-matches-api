@@ -132,6 +132,20 @@ async def batch(query: BatchQuery) -> Any:
     return {"results": list(results.values())}
 
 
+@app.get("/health", include_in_schema=False)
+async def health():
+    try:
+        with (settings.path / "interpro.json").open("rt") as fh:
+            obj = json.load(fh)
+    except FileNotFoundError:
+        raise HTTPException(status_code=503, detail="Service not ready")
+
+    if obj["release"] == settings.info["release"]:
+        return {"status": "ok"}
+    else:
+        raise HTTPException(status_code=503, detail="Service not ready")
+
+
 @app.get("/info", include_in_schema=False)
 async def info():
     return settings.info
