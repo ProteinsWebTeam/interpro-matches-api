@@ -46,7 +46,7 @@ docker run --rm \
   -v $PWD/matches-api-data:/data \
   -e MATCHES_API_PATH=/data \
   -p 8000:8000 \
-  interpro/matches-api:0.2.0
+  interpro/matches-api:0.3.0
 ```
 
 #### With Singularity
@@ -65,7 +65,7 @@ Then run:
 singularity run \
     -B $PWD/matches-api-data:/data \
     --env "MATCHES_API_PATH=/data" \
-    docker://interpro/matches-api:0.2.0
+    docker://interpro/matches-api:0.3.0
 ```
 
 ### Querying the running API
