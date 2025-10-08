@@ -7,7 +7,7 @@ which serves as a unique key for fast lookups of its associated InterPro matches
 When InterProScan runs, it computes the MD5 hash of each input sequence and queries this API. 
 If the sequence is already in UniParc, the pre-calculated results are returned immediately—saving 
 compute time and resources. Although this API was created to speed up InterProScan, 
-you can also use it directly: submit up to 1,000 MD5 hashes in a single request 
+you can also use it directly: submit up to 100 MD5 hashes in a single request 
 and retrieve their InterPro matches in bulk.
 
 ## Usage
