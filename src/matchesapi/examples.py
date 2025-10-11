@@ -195,7 +195,7 @@ matches = [
                 },
                 "modelAccession": "PTHR10553:SF2",
                 "source": "PANTHER",
-                "annotationNode": "AN257",
+                "ancestralNode": "AN257",
                 "evalue": 7.9e-33,
                 "score": 123.9,
                 "locations": [
@@ -606,7 +606,7 @@ matches = [
                 },
                 "modelAccession": "PTHR19271:SF16",
                 "source": "PANTHER",
-                "annotationNode": "AN168",
+                "ancestralNode": "AN168",
                 "evalue": 6.4e-108,
                 "score": 372.9,
                 "locations": [
@@ -1098,7 +1098,7 @@ matches = [
                 },
                 "source": "PANTHER",
                 "modelAccession": "PTHR10907:SF47",
-                "annotationNode": "AN167",
+                "ancestralNode": "AN167",
                 "evalue": 3.5e-77,
                 "score": 271.1,
                 "locations": [

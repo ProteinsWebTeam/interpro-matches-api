@@ -69,7 +69,7 @@ class Match(BaseModel):
     locations: list[Location]
     score: float | None = None
     evalue: float | None = None
-    annotationNode: str | None = None
+    ancestralNode: str | None = None
     graphscan: str | None = None
 
 
