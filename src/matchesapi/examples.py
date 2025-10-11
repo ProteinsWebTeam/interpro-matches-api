@@ -18,6 +18,7 @@ matches = [
                     },
                 },
                 "modelAccession": "cd01719",
+                "source": "CDD",
                 "locations": [
                     {
                         "start": 6,
@@ -123,6 +124,7 @@ matches = [
                     "entry": None,
                 },
                 "modelAccession": "4m75F00",
+                "source": "CATH-Gene3D",
                 "score": 88.6,
                 "evalue": 9.2e-25,
                 "locations": [
@@ -154,6 +156,7 @@ matches = [
                     "entry": None,
                 },
                 "modelAccession": "2.30.30.100-FF-000023",
+                "source": "CATH-FunFam",
                 "score": 147.3,
                 "evalue": 3.4e-43,
                 "locations": [
@@ -191,6 +194,7 @@ matches = [
                     },
                 },
                 "modelAccession": "PTHR10553:SF2",
+                "source": "PANTHER",
                 "annotationNode": "AN257",
                 "evalue": 7.9e-33,
                 "score": 123.9,
@@ -218,6 +222,7 @@ matches = [
                     "entry": None,
                 },
                 "modelAccession": "PIRSF037188",
+                "source": "PIRSF",
                 "score": 68.3,
                 "evalue": 9.4e-20,
                 "locations": [
@@ -255,6 +260,7 @@ matches = [
                     },
                 },
                 "modelAccession": "PS52002",
+                "source": "PROSITE profiles",
                 "locations": [
                     {
                         "start": 5,
@@ -281,6 +287,7 @@ matches = [
                     },
                 },
                 "modelAccession": "SM00651",
+                "source": "SMART",
                 "score": 93.1,
                 "evalue": 3.3e-23,
                 "locations": [
@@ -316,6 +323,7 @@ matches = [
                     },
                 },
                 "modelAccession": "0040799",
+                "source": "SUPERFAMILY",
                 "evalue": 1.89e-20,
                 "locations": [
                     {
@@ -342,6 +350,7 @@ matches = [
                     },
                 },
                 "modelAccession": "PF01423",
+                "source": "Pfam",
                 "score": 79.1,
                 "evalue": 4.9e-19,
                 "locations": [
@@ -381,6 +390,7 @@ matches = [
                     },
                 },
                 "modelAccession": "cd00284",
+                "source": "CDD",
                 "locations": [
                     {
                         "start": 1,
@@ -563,6 +573,7 @@ matches = [
                     },
                 },
                 "modelAccession": "3tguC00",
+                "source": "CATH-Gene3D",
                 "score": 427.6,
                 "evalue": 1.2e-127,
                 "locations": [
@@ -594,6 +605,7 @@ matches = [
                     "entry": None,
                 },
                 "modelAccession": "PTHR19271:SF16",
+                "source": "PANTHER",
                 "annotationNode": "AN168",
                 "evalue": 6.4e-108,
                 "score": 372.9,
@@ -630,6 +642,7 @@ matches = [
                     },
                 },
                 "modelAccession": "PS51003",
+                "source": "PROSITE profiles",
                 "locations": [
                     {
                         "start": 191,
@@ -659,6 +672,7 @@ matches = [
                     },
                 },
                 "modelAccession": "PS51002",
+                "source": "PROSITE profiles",
                 "locations": [
                     {
                         "start": 1,
@@ -682,6 +696,7 @@ matches = [
                     "entry": None,
                 },
                 "modelAccession": "TRANSMEMBRANE",
+                "source": "Phobius",
                 "locations": [
                     {
                         "start": 12,
@@ -728,6 +743,7 @@ matches = [
                     "entry": None,
                 },
                 "modelAccession": "NON_CYTOPLASMIC_DOMAIN",
+                "source": "Phobius",
                 "locations": [
                     {
                         "start": 37,
@@ -759,6 +775,7 @@ matches = [
                     "entry": None,
                 },
                 "modelAccession": "CYTOPLASMIC_DOMAIN",
+                "source": "Phobius",
                 "locations": [
                     {
                         "start": 1,
@@ -801,6 +818,7 @@ matches = [
                     },
                 },
                 "modelAccession": "0037289",
+                "source": "SUPERFAMILY",
                 "evalue": 2.11e-14,
                 "locations": [
                     {
@@ -830,6 +848,7 @@ matches = [
                     },
                 },
                 "modelAccession": "0035490",
+                "source": "SUPERFAMILY",
                 "evalue": 6.12e-119,
                 "locations": [
                     {
@@ -856,6 +875,7 @@ matches = [
                     },
                 },
                 "modelAccession": "PF00033",
+                "source": "Pfam",
                 "score": 285.8,
                 "evalue": 5.1e-82,
                 "locations": [
@@ -890,6 +910,7 @@ matches = [
                     },
                 },
                 "modelAccession": "PF00032",
+                "source": "Pfam",
                 "score": 49.3,
                 "evalue": 1.5e-09,
                 "locations": [
@@ -920,12 +941,13 @@ matches = [
                     "description": "Consensus disorder prediction",
                     "type": "Region",
                     "signatureLibraryRelease": {
-                        "library": "MobiDB Lite",
+                        "library": "MobiDB-lite",
                         "version": "4.0",
                     },
                     "entry": None,
                 },
                 "modelAccession": "mobidb-lite",
+                "source": "MobiDB-lite",
                 "locations": [
                     {
                         "start": 93,
@@ -966,6 +988,7 @@ matches = [
                     "entry": None,
                 },
                 "modelAccession": "TRANSMEMBRANE",
+                "source": "Phobius",
                 "locations": [
                     {
                         "start": 290,
@@ -987,6 +1010,7 @@ matches = [
                     "entry": None,
                 },
                 "modelAccession": "CYTOPLASMIC_DOMAIN",
+                "source": "Phobius",
                 "locations": [
                     {
                         "start": 310,
@@ -1007,6 +1031,7 @@ matches = [
                     },
                     "entry": None,
                 },
+                "source": "Phobius",
                 "modelAccession": "NON_CYTOPLASMIC_DOMAIN",
                 "locations": [
                     {
@@ -1039,6 +1064,7 @@ matches = [
                         "parent": None,
                     },
                 },
+                "source": "CATH-Gene3D",
                 "modelAccession": "4gn8A00",
                 "score": 307.8,
                 "evalue": 2.2e-91,
@@ -1070,6 +1096,7 @@ matches = [
                     },
                     "entry": None,
                 },
+                "source": "PANTHER",
                 "modelAccession": "PTHR10907:SF47",
                 "annotationNode": "AN167",
                 "evalue": 3.5e-77,
@@ -1103,6 +1130,7 @@ matches = [
                         "parent": None,
                     },
                 },
+                "source": "PRINTS",
                 "modelAccession": "PR01790",
                 "evalue": 2.6e-33,
                 "graphscan": "IIiIII",
@@ -1169,6 +1197,7 @@ matches = [
                     },
                     "entry": None,
                 },
+                "source": "SUPERFAMILY",
                 "modelAccession": "0052427",
                 "evalue": 8.18e-58,
                 "locations": [
@@ -1195,6 +1224,7 @@ matches = [
                         "parent": None,
                     },
                 },
+                "source": "Pfam",
                 "modelAccession": "PF08450",
                 "score": 277.0,
                 "evalue": 4.6e-79,

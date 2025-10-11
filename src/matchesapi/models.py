@@ -65,6 +65,7 @@ class Signature(BaseModel):
 class Match(BaseModel):
     signature: Signature
     modelAccession: str
+    source: str
     locations: list[Location]
     score: float | None = None
     evalue: float | None = None
