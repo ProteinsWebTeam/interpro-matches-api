@@ -1,5 +1,6 @@
 import importlib.metadata
 import json
+from contextlib import asynccontextmanager
 from typing import Any
 
 from fastapi import FastAPI, HTTPException
@@ -37,6 +38,16 @@ db = Rdict(
     access_type=AccessType.read_only(),
     options=Options(raw_mode=True),
 )
+
+
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    with (settings.path / "interpro.json").open("rt") as fh:
+        settings.info.update(json.load(fh))
+    yield
+    db.close()
+
+
 app = FastAPI(
     title="InterPro Matches API",
     description=f"""
@@ -69,6 +80,8 @@ efficiently access pre-calculated match results.""",
     # Docs URLs
     docs_url="/",  # default
     redoc_url=None,  # disable ReDoc
+    # Start/shutdown events
+    lifespan=lifespan
 )
 app.add_middleware(
     CORSMiddleware,
@@ -76,17 +89,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-@app.on_event("startup")
-async def on_startup():
-    with (settings.path / "interpro.json").open("rt") as fh:
-        settings.info.update(json.load(fh))
-
-
-@app.on_event("shutdown")
-async def on_shutdown():
-    db.close()
 
 
 @app.get(
