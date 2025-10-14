@@ -5,6 +5,7 @@ from typing import Any
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import BaseModel, DirectoryPath, constr, conlist
 from rocksdict import Rdict, AccessType, Options
@@ -81,7 +82,7 @@ efficiently access pre-calculated match results.""",
     docs_url="/",  # default
     redoc_url=None,  # disable ReDoc
     # Start/shutdown events
-    lifespan=lifespan
+    lifespan=lifespan,
 )
 app.add_middleware(
     CORSMiddleware,
@@ -143,11 +144,23 @@ async def health():
         raise HTTPException(status_code=503, detail="Service not ready")
 
     if obj["release"] == settings.info["release"]:
-        return {"status": "ok"}
+        return JSONResponse(
+            content={"status": "ok"},
+            headers={
+                "Cache-Control": "no-cache, no-store, must-revalidate",
+                "Expires": "0",
+            },
+        )
     else:
         raise HTTPException(status_code=503, detail="Service not ready")
 
 
 @app.get("/info", include_in_schema=False)
 async def info():
-    return settings.info
+    return JSONResponse(
+        content=settings.info,
+        headers={
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Expires": "0",
+        },
+    )
