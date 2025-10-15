@@ -1,6 +1,6 @@
 # InterPro Matches API
 
-The InterPro Matches API provides programmatic access to pre-computed [InterProScan](https://github.com/ebi-pf-team/interproscan/) results 
+The InterPro Matches API provides programmatic access to pre-computed [InterProScan 6](https://github.com/ebi-pf-team/interproscan6/) results 
 for every sequence in [UniParc](https://www.uniprot.org/uniparc/). Each UniParc sequence is identified by its MD5 hash, 
 which serves as a unique key for fast lookups of its associated InterPro matches.
 
