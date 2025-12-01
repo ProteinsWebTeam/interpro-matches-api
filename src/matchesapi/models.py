@@ -16,6 +16,7 @@ class SiteLocation(BaseModel):
 
 
 class Site(BaseModel):
+    source: str
     description: str | None
     numLocations: int
     siteLocations: list[SiteLocation]
