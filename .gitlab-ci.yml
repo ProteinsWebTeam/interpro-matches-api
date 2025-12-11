@@ -1,6 +1,9 @@
 stages:
   - build
+  - deploy-staging
+  - deploy-live
 
+# Build: always run
 build_image:
   stage: build
   image: docker:27
@@ -11,3 +14,53 @@ build_image:
     - docker build -f Dockerfile.embl-ebi -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA" -t "$CI_REGISTRY_IMAGE:latest" .
     - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
     - docker push "$CI_REGISTRY_IMAGE:latest"
+
+# Deploy template
+.deploy:
+  image:
+    name: bitnami/kubectl
+    entrypoint: ["/bin/sh", "-c"]
+  script:
+    - cat "$KUBECONFIG_B64" | base64 -d > kubeconfig
+    - export KUBECONFIG="$PWD/kubeconfig"
+    - kubectl rollout restart deployment matchesapi-app -n ${NAMESPACE}
+
+# Staging: automatic after build
+deploy_staging:
+  stage: deploy-staging
+  extends: .deploy
+  environment:
+    name: staging
+  needs:
+    - job: build_image
+  variables:
+    KUBECONFIG_B64: "$KUBECONFIG_STAGING"
+    NAMESPACE: "matchesapi-test"
+
+# Live: automatic after build
+deploy_live:
+  stage: deploy-live
+  extends: .deploy
+  environment:
+    name: live
+  when: manual
+  allow_failure: false
+  needs:
+    - job: deploy_staging
+  variables:
+    KUBECONFIG_B64: "$KUBECONFIG_LIVE"
+    NAMESPACE: "matchesapi-live"
+
+# Failover: automatic after build
+deploy_failover:
+  stage: deploy-live
+  extends: .deploy
+  environment:
+    name: failover
+  when: manual
+  allow_failure: false
+  needs:
+    - job: deploy_staging
+  variables:
+    KUBECONFIG_B64: "$KUBECONFIG_FAILOVER"
+    NAMESPACE: "matchesapi-failover"
