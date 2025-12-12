@@ -1,12 +1,12 @@
 from typing import Annotated
 
-from pydantic import BaseModel, StringConstraints
+from pydantic import BaseModel, Field, StringConstraints
 
 
 class LocationFragment(BaseModel):
     start: int
     end: int
-    type: str
+    type: str = Field(alias="dc-status")
 
 
 class SiteLocation(BaseModel):
@@ -24,7 +24,7 @@ class Site(BaseModel):
 class Location(BaseModel):
     start: int
     end: int
-    fragments: list[LocationFragment]
+    fragments: list[LocationFragment] = Field(alias="location-fragments")
     hmmStart: int | None = None
     hmmEnd: int | None = None
     hmmLength: int | None = None
@@ -33,7 +33,7 @@ class Location(BaseModel):
     envelopeEnd: int | None = None
     evalue: float | None = None
     score: float | None = None
-    sequenceFeature: str | None = None
+    feature: str | None = Field(alias="sequence-feature", default=None)
     sites: list[Site] | None = None
     pvalue: float | None = None
     motifNumber: int | None = None
@@ -64,7 +64,7 @@ class Signature(BaseModel):
 
 class Match(BaseModel):
     signature: Signature
-    modelAccession: str
+    model_accession: str = Field(alias="model-ac")
     source: str
     locations: list[Location]
     score: float | None = None

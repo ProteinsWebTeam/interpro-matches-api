@@ -102,5 +102,5 @@ Point the server to that database and launch it:
 
 ```sh
 export MATCHES_API_PATH="data/minidb"
-uvicorn matchesapi.main:app
+uvicorn --reload matchesapi.main:app
 ```

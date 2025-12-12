@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "interpro-matches-api"
-version = "0.4.1"
+version = "0.5.0"
 authors = [
     { name="Matthias Blum", email="mblum@ebi.ac.uk" },
     { name="Alessandro Polignano", email="polignan@ebi.ac.uk" },
@@ -13,8 +13,9 @@ description = "InterPro Matches API"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "fastapi[all]~=0.124",
+    "pydantic>=2.11,<3",
     "rocksdict~=0.3",
-    "fastapi[all]~=0.115",
 ]
 
 [tool.hatch.build.targets.wheel]
