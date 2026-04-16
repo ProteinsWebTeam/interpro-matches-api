@@ -18,5 +18,10 @@ dependencies = [
     "rocksdict==0.3.29",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "pytest==9.0.0",
+]
+
 [tool.hatch.build.targets.wheel]
 packages = ["src/matchesapi"]
