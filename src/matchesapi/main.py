@@ -17,7 +17,6 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_prefix="MATCHES_API_")
     path: DirectoryPath
     limit: int = 100
-    debug: bool = False
     info: dict = {"api": importlib.metadata.version("interpro-matches-api")}
 
 
