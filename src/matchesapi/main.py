@@ -87,7 +87,7 @@ efficiently access pre-calculated match results.""",
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_methods=["*"],
+    allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
 
@@ -100,7 +100,7 @@ app.add_middleware(
     responses=examples.single_responses,
     response_model_exclude_unset=True,
 )
-async def single(md5: constr(to_upper=True, min_length=32, max_length=32)) -> Any:
+async def single(md5: models.MD5String) -> Any:
     """
     Search for a single MD5 hash using a URL parameter.
     """
