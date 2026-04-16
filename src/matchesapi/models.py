@@ -74,7 +74,7 @@ class Match(BaseModel):
 
 
 class SingleResponse(BaseModel):
-    md5: str
+    md5: "MD5String"
     matches: list[Match]
 
 
@@ -87,5 +87,5 @@ class BatchResponse(BaseModel):
 
 
 MD5String = Annotated[
-    str, StringConstraints(to_upper=True, min_length=32, max_length=32)
+    str, StringConstraints(to_upper=True, pattern=r"(?i)^[0-9a-f]{32}$")
 ]
