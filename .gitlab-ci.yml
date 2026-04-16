@@ -1,0 +1,156 @@
+stages:
+  - build
+  - deploy-staging
+  - deploy-live
+
+# ----------------------
+# BUILD
+# ----------------------
+build_image:
+  stage: build
+  image: docker:27
+  variables:
+    DOCKER_HOST: unix:///var/run/docker.sock
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_COMMIT_TAG'
+  script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+
+    # Build immutable image
+    - docker build -f Dockerfile.embl-ebi -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA" .
+    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
+
+    # Tag for staging (main branch)
+    - |
+      if [ "$CI_COMMIT_BRANCH" = "main" ]; then
+        docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA" "$CI_REGISTRY_IMAGE:main"
+        docker push "$CI_REGISTRY_IMAGE:main"
+      fi
+
+    # Tag for production (release tag)
+    - |
+      if [ -n "$CI_COMMIT_TAG" ]; then
+        docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA" "$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG"
+        docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG"
+      fi
+
+# ----------------------
+# DEPLOY TEMPLATE
+# ----------------------
+.deploy:
+  image:
+    name: bitnami/kubectl
+    entrypoint: ["/bin/sh", "-c"]
+  before_script:
+    - printf '%s' "$KUBECONFIG_B64" | base64 -d > kubeconfig
+    - export KUBECONFIG="$PWD/kubeconfig"
+
+# ----------------------
+# STAGING (AUTO ON MAIN)
+# ----------------------
+deploy_staging:
+  stage: deploy-staging
+  extends: .deploy
+  environment:
+    name: staging
+  needs:
+    - build_image
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+  script:
+    - kubectl set image deployment/matchesapi-app \
+        matches-api="$CI_REGISTRY_IMAGE:main" \
+        -n "$NAMESPACE"
+  variables:
+    KUBECONFIG_B64: "$KUBECONFIG_STAGING"
+    NAMESPACE: "matchesapi-test"
+
+# ----------------------
+# LIVE (MANUAL ON TAG)
+# ----------------------
+deploy_live:
+  stage: deploy-live
+  extends: .deploy
+  environment:
+    name: live
+  when: manual
+  allow_failure: false
+  needs:
+    - build_image
+  rules:
+    - if: '$CI_COMMIT_TAG'
+  script:
+    - kubectl set image deployment/matchesapi-app \
+        matches-api="$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG" \
+        -n "$NAMESPACE"
+  variables:
+    KUBECONFIG_B64: "$KUBECONFIG_LIVE"
+    NAMESPACE: "matchesapi-live"
+
+# ----------------------
+# FAILOVER (MANUAL ON TAG)
+# ----------------------
+deploy_failover:
+  stage: deploy-live
+  extends: .deploy
+  environment:
+    name: failover
+  when: manual
+  allow_failure: false
+  needs:
+    - build_image
+  rules:
+    - if: '$CI_COMMIT_TAG'
+  script:
+    - kubectl set image deployment/matchesapi-app \
+        matches-api="$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG" \
+        -n "$NAMESPACE"
+  variables:
+    KUBECONFIG_B64: "$KUBECONFIG_FAILOVER"
+    NAMESPACE: "matchesapi-failover"
+
+# ----------------------
+# MANUAL REDEPLOY (NO IMAGE CHANGE)
+# ----------------------
+redeploy_staging:
+  stage: deploy-staging
+  extends: .deploy
+  when: manual
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_PIPELINE_SOURCE == "web" && $CI_COMMIT_BRANCH == "main"'
+  script:
+    - kubectl rollout restart deployment matchesapi-app -n "$NAMESPACE"
+  variables:
+    KUBECONFIG_B64: "$KUBECONFIG_STAGING"
+    NAMESPACE: "matchesapi-test"
+
+
+redeploy_live:
+  stage: deploy-live
+  extends: .deploy
+  when: manual
+  rules:
+    - if: '$CI_COMMIT_TAG'
+    - if: '$CI_PIPELINE_SOURCE == "web" && $CI_COMMIT_TAG'
+  script:
+    - kubectl rollout restart deployment matchesapi-app -n "$NAMESPACE"
+  variables:
+    KUBECONFIG_B64: "$KUBECONFIG_LIVE"
+    NAMESPACE: "matchesapi-live"
+
+
+redeploy_failover:
+  stage: deploy-live
+  extends: .deploy
+  when: manual
+  rules:
+    - if: '$CI_COMMIT_TAG'
+    - if: '$CI_PIPELINE_SOURCE == "web" && $CI_COMMIT_TAG'
+  script:
+    - kubectl rollout restart deployment matchesapi-app -n "$NAMESPACE"
+  variables:
+    KUBECONFIG_B64: "$KUBECONFIG_FAILOVER"
+    NAMESPACE: "matchesapi-failover"
+  
